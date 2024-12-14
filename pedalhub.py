@@ -6,34 +6,38 @@ from booking import Booking
 from datamanager import DataManager
 
 
-
 class PedalHub:
     ADMIN_USERNAME = "admin"
     ADMIN_PASSWORD = "youradmin123"
-    BIKE_FILE = "bike_inventory.json"
-    BOOKINGS_FILE = "bookings.json"
-    HISTORY_FILE = "rental_history.json"
+    BIKE_FILE = "bike_inventory.json"        # File to store bike details
+    BOOKINGS_FILE = "bookings.json"          # File to store boooking details
+    HISTORY_FILE = "rental_history.json"     # File to store rental history
 
     def __init__(self):
-        self.bike_inventory = []
-        self.bookings = []
-        self.rental_history = []
+        #Initializes the PedalHUb class by loading data from files.
+        self.bike_inventory = []     # List to store bike details
+        self.bookings = []           # List to store active rentals
+        self.rental_history = []     # List to store completed rentals
         try:
-            self.load_data()
+            self.load_data()        # Load existing data from files
         except Exception as e:
             print(f"Error initializing PedalHub: {e}")
 
+    #Clears the console/terminal screen based on the operating system
     def clear_screen(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
+    # Load data from JSON files
     def load_data(self):
         try:
+            # Load the bike inventory, rentals/bookings, and rental history
             self.bike_inventory = self.load_from_file(self.BIKE_FILE, BikeDetails.from_dict)
             self.bookings = self.load_from_file(self.BOOKINGS_FILE)
             self.rental_history = self.load_from_file(self.HISTORY_FILE)
         except (FileNotFoundError, json.JSONDecodeError) as e:
-            print(f"Error loading data: {e}. Files will be recreated on save.")
+            print(f"Error loading data: {e}. Files will be recreated on save.")  # Handle errors if files are missing or corrupted
 
+    # Save current data (bikes, bookings, rental history) to respective files
     def save_data(self):
         try:
             self.save_to_file(self.BIKE_FILE, [bike.to_dict() for bike in self.bike_inventory])
@@ -42,20 +46,22 @@ class PedalHub:
         except Exception as e:
             print(f"Error saving data: {e}")
 
+    # Helper function to load data from a file and transform it if necessary
     @staticmethod
     def load_from_file(filename, transform=None):
-        if not os.path.exists(filename):
+        if not os.path.exists(filename): # Return empty list if file doesn't exist
             return []
-        with open(filename, "r") as file:
-            data = json.load(file)
-            if transform:
+        with open(filename, "r") as file: 
+            data = json.load(file)  # Read data from the file in JSON format
+            if transform: # If a transformation function is provided, use it to convert data items
                 return [transform(item) for item in data]
-            return data
+            return data  # Return the raw data
 
+    # Helper function to save data to a file in JSON format
     @staticmethod
     def save_to_file(filename, data):
         with open(filename, "w") as file:
-            json.dump(data, file, indent=4)
+            json.dump(data, file, indent=4)  # Helper function to save data to a file
 
     def run(self):
         try:
@@ -74,12 +80,12 @@ class PedalHub:
                     self.admin_dashboard()
                 elif choice == 4:
                     print("\nThank you for choosing Pedal Hub! See you next time!")
-                    self.save_data()
+                    self.save_data()  # Save all data before exiting
                     break
                 else:
                     print("Invalid choice. Try again.")
         except KeyboardInterrupt:
-            print("\nProgram terminated by user.")
+            print("\nProgram terminated by user.")   # Handle manual interruption of the program
         except Exception as e:
             print(f"An unexpected error occured: {e}")
 
@@ -97,7 +103,7 @@ class PedalHub:
     def view_bikes(self):
         try:
             self.clear_screen()
-            
+            # A bike size chart as a guide for users when choosing the right bike for them
             print("\t\tMOUNTAIN/ROAD BIKE SIZE CHART\t\t\t\t\t\t\t\t  CHILDREN BIKE SIZE CHART\n")
             print("RIDER HEIGHT IN CM\tFRAME SIZE IN CM\t  STATED SIZE\t\t\t  RIDER AGE\t  RIDER HEIGHT IN CM\t    WHEEL SIZE (inches)\t    STATED SIZE")
             print("---------------------------------------------------------------------------------------------------------------------------------------------------------------")
@@ -116,12 +122,12 @@ class PedalHub:
                 print("No bikes available at the moment.")
                 return
 
+            # Display the bike inventory in a structured tabular format
             print(f"{'Bike ID':<15} {'Type':<20} {'Size':10} {'Color':<15} {'Rental Price (per hour)':<30} {'Available':<20}")
-            print("=" * 110)  # Print a line to separate the header from the data
+            print("=" * 110) 
 
-            # Loop through each bike and display its details
+             # Loop through the bikes in the inventory and display each bike's details
             for bike in self.bike_inventory:
-                # Ensure that the bike details are displayed in a tabular format
                 availability = "Yes" if bike.available else "No"
                 print(f"{bike.bike_id:<15} {bike.bike_type:<20} {bike.size:<10} {bike.color:<15} Php {bike.rental_price:<27.2f} {availability:<20}")
         
@@ -138,6 +144,7 @@ class PedalHub:
 
             bike_id = input("Enter Bike ID to rent: ").strip()
             
+            # Search for the selected bike in the inventory
             selected_bike = None
             for bike in self.bike_inventory:
                 if bike.bike_id.lower() == bike_id.lower():
@@ -195,7 +202,7 @@ class PedalHub:
 
             total_cost = bike.calculate_rental_cost(duration_hours)
 
-            # Store booking details
+            # Create a booking record for the rental
             booking = {
                 "customer_firstName": customer_firstName,
                 "customer_lastName": customer_lastName,
@@ -203,12 +210,16 @@ class PedalHub:
                 "bike_id": bike.bike_id,
                 "rental_hours": duration_hours,
                 "total_cost": total_cost,
-                "status": "Active"
+                "status": "Active"  # Mark the booking as active initially
             }
-            bike.available = False
+            
+            bike.available = False  # Mark the bike as rented (not available)
+            
+            # Add the booking to the list of active bookings and rental history
             self.bookings.append(booking)
             self.rental_history.append({**booking, "status": "Active"})
             
+            # Save updated data to the files
             self.save_data()
             print(f"\nRental confirmed. Bike {bike_id} has been rented by {customer_firstName}.\nTotal Cost: Php {total_cost:.2f}")
             return
@@ -329,7 +340,7 @@ class PedalHub:
             print("No rentals available at the moment.")
             return
 
-        # Display each booking in a simple format
+        # Display each booking in a tabular format
         for index, booking in enumerate(self.bookings, start=1):
             print(f"\nRental #{index}")
             print(f"  First Name     : {booking['customer_firstName']}")
@@ -341,9 +352,9 @@ class PedalHub:
             print(f"  Status         : {booking.get('status', 'Active')}")  # Display status
             print("-" * 40)
             
-        # Prompt for deletion
+        # Deletion of bike
         while True:
-            delete_choice = input("\nDo you want to delete a rental? (yes/no): ").strip().lower()
+            delete_choice = input("Do you want to delete a rental? (yes/no): ").strip().lower()
             if delete_choice == "yes":
                 # Ask for the booking number to delete
                 try:
@@ -378,12 +389,16 @@ class PedalHub:
         while True:
             try:
                 value = input_type(input(prompt).strip())
+                
+                # Checks if a minimum value is set, and ensure the entered value is not less than the minimum
                 if min_value and value < min_value:
                     print(f"Value must be at least {min_value}. Try again.")
-                    continue
+                    continue   # If the input is too low, ask for input again
+                
+                # Check if a maximum value is set, and ensure the entered value is not greater than the maximum
                 if max_value and value > max_value:
                     print(f"Value must be at most {max_value}. Try again.")
-                    continue
+                    continue  # If the input is too high, ask for input again
                 return value
             except ValueError:
                 print("Invalid input. Please try again.")

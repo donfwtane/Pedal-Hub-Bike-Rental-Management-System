@@ -1,0 +1,11 @@
+[
+    {
+        "customer_firstName": "Roxanne",
+        "customer_lastName": "Ariola",
+        "customer_phone": "1234567890",
+        "bike_id": "B001",
+        "rental_hours": 3,
+        "total_cost": 30.0,
+        "status": "Completed"
+    }
+]

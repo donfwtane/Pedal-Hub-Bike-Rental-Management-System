@@ -388,7 +388,6 @@ class PedalHub:
             except ValueError:
                 print("Invalid input. Please try again.")
 
-# Fixing the call to start the program
 if __name__ == "__main__":         
     pedal_hub = PedalHub()  # Create instance of PedalHub
     pedal_hub.run()  # Start the system

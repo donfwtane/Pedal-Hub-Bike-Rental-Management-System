@@ -4,24 +4,6 @@
         "customer_lastName": "Ariola",
         "customer_phone": "1234567890",
         "bike_id": "B001",
-        "rental_hours": 0.5833333333333334,
-        "total_cost": 5.833333333333334,
-        "status": "Active"
-    },
-    {
-        "customer_firstName": "Roxanne",
-        "customer_lastName": "Ariola",
-        "customer_phone": "1234567890",
-        "bike_id": "B001",
-        "rental_hours": 3,
-        "total_cost": 30.0,
-        "status": "Active"
-    },
-    {
-        "customer_firstName": "Roxanne",
-        "customer_lastName": "Ariola",
-        "customer_phone": "1234567890",
-        "bike_id": "B001",
         "rental_hours": 3,
         "total_cost": 30.0,
         "status": "Active"

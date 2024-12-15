@@ -58,6 +58,7 @@ class PedalHub:
     def save_to_file(filename, data):
         with open(filename, "w") as file:
             json.dump(data, file, indent=4)  # Helper function to save data to a file
+            
 
     def run(self):
         try:
@@ -264,6 +265,18 @@ class PedalHub:
             password = input("Enter Admin Password: ").strip()
             return username == self.ADMIN_USERNAME and password == self.ADMIN_PASSWORD
         
+    def rentals (self):  # Function that enumarates and displays all the rentals
+        for index, booking in enumerate(self.bookings, start=1):
+            print(f"\nRental #{index}")
+            print(f"  First Name     : {booking['customer_firstName']}")
+            print(f"  Last Name      : {booking['customer_lastName']}")
+            print(f"  Phone Number   : {booking['customer_phone']}")
+            print(f"  Bike ID        : {booking['bike_id']}")
+            print(f"  Rental Hours   : {booking['rental_hours']}")
+            print(f"  Total Cost     : Php {booking['total_cost']:.2f}")
+            print(f"  Status         : {booking.get('status', 'Active')}")  # Display status
+            print("-" * 40)
+        
         
     def admin_dashboard(self):
         """ 
@@ -349,16 +362,7 @@ class PedalHub:
     def mark_bike_completed(self):
         self.clear_screen()
         
-        for index, booking in enumerate(self.bookings, start=1):
-            print(f"\nRental #{index}")
-            print(f"  First Name     : {booking['customer_firstName']}")
-            print(f"  Last Name      : {booking['customer_lastName']}")
-            print(f"  Phone Number   : {booking['customer_phone']}")
-            print(f"  Bike ID        : {booking['bike_id']}")
-            print(f"  Rental Hours   : {booking['rental_hours']}")
-            print(f"  Total Cost     : Php {booking['total_cost']:.2f}")
-            print(f"  Status         : {booking.get('status', 'Active')}")  # Display status
-            print("-" * 40)
+        self.rentals()
         
         print("\n\n*|---------- Mark Bike as Completed ----------|*")
 
@@ -397,16 +401,7 @@ class PedalHub:
             return
 
         # Display each booking in a tabular format
-        for index, booking in enumerate(self.bookings, start=1):
-            print(f"\nRental #{index}")
-            print(f"  First Name     : {booking['customer_firstName']}")
-            print(f"  Last Name      : {booking['customer_lastName']}")
-            print(f"  Phone Number   : {booking['customer_phone']}")
-            print(f"  Bike ID        : {booking['bike_id']}")
-            print(f"  Rental Hours   : {booking['rental_hours']}")
-            print(f"  Total Cost     : Php {booking['total_cost']:.2f}")
-            print(f"  Status         : {booking.get('status', 'Active')}")  # Display status
-            print("-" * 40)
+        self.rentals()
             
         # Deletion of bike
         while True:

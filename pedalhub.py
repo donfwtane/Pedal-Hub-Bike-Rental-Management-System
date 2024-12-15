@@ -8,8 +8,8 @@ from datamanager import DataManager
 
 
 class PedalHub:
-    ADMIN_USERNAME = "admin"
-    ADMIN_PASSWORD = "youradmin123"
+    ADMIN_USERNAME = "admin"                 # Admin Username in Admin Login Dashboard
+    ADMIN_PASSWORD = "youradmin123"          # Admin Password in Admin Login Dashboard
     BIKE_FILE = "bike_inventory.json"        # File to store bike details
     BOOKINGS_FILE = "bookings.json"          # File to store boooking details
     HISTORY_FILE = "rental_history.json"     # File to store rental history

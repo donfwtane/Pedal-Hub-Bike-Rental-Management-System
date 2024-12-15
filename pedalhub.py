@@ -8,8 +8,8 @@ from datamanager import DataManager
 
 
 class PedalHub:
-    ADMIN_USERNAME = "admin"                 # Admin Username in Admin Login Dashboard
-    ADMIN_PASSWORD = "youradmin123"          # Admin Password in Admin Login Dashboard
+    ADMIN_USERNAME = "admin"
+    ADMIN_PASSWORD = "youradmin123"
     BIKE_FILE = "bike_inventory.json"        # File to store bike details
     BOOKINGS_FILE = "bookings.json"          # File to store boooking details
     HISTORY_FILE = "rental_history.json"     # File to store rental history
@@ -105,7 +105,7 @@ class PedalHub:
         try:
             self.clear_screen()
             # A bike size chart as a guide for users when choosing the right bike for them
-            print("\t\tMOUNTAIN/ROAD BIKE SIZE CHART\t\t\t\t\t\t\t\t  CHILDREN BIKE SIZE CHART\n")
+            print("====================================================================== BIKE SIZE CHART ========================================================================\n")
             print("RIDER HEIGHT IN CM\tFRAME SIZE IN CM\t  STATED SIZE\t\t\t  RIDER AGE\t  RIDER HEIGHT IN CM\t    WHEEL SIZE (inches)\t    STATED SIZE")
             print("---------------------------------------------------------------------------------------------------------------------------------------------------------------")
             print("     120-135\t\t   18-20\t\t      XXS\t\t\t     4-6\t\t110-120\t\t\t    16\"\t\t\t S")

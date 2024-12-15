@@ -400,7 +400,6 @@ class PedalHub:
             print("No rentals available at the moment.")
             return
 
-        # Display each booking in a tabular format
         self.rentals()
             
         # Deletion of bike

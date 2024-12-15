@@ -1,5 +1,11 @@
 import json
 
+""" 
+Class that handles the saving and loading of data to/from a file. 
+It helps store and retrieve information such as customer details, bike rentals, etc.
+We use JSON format for saving, which makes it easy to read and store data in files.
+"""
+
 class DataManager:
 
     # Static method to load data from a file and optionally transform each item

@@ -223,17 +223,17 @@ class PedalHub:
                     except ValueError:
                         print("Invalid input. Please enter a valid number.")
 
-                if duration_hours is not None:
-                    total_cost = bike.calculate_rental_cost(duration_hours)
+            if duration_hours is not None:
+                total_cost = bike.calculate_rental_cost(duration_hours)
 
-                    if duration_choice == 2:
-                        print(f"Rental Duration: {duration_hours: .2f} minutes.")
-                    else:
-                        print(f"Rental duration: {duration_hours} hours.")
-                        
-                    print(f"Rental cost: Php {total_cost: .2f}")
+                if duration_choice == 2:
+                    print(f"\nRental Duration: {duration_hours: .2f} minutes")
                 else:
-                    print("Error renting bike: Duration is not valid.")
+                    print(f"Rental duration: {duration_hours: } hours.")
+                    
+                print(f"Rental cost: Php {total_cost: .2f}")
+            else:
+                print("Error renting bike: Duration is not valid.")
     
                 
             # Create a booking record for the rental

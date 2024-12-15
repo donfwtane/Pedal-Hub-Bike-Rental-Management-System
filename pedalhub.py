@@ -337,7 +337,7 @@ class PedalHub:
     def delete_bike(self):
         self.clear_screen()
         self.view_bikes()
-        print("*|---------- Delete Bike ----------|\n*")
+        print("\n\n*|------------- Delete Bike -------------|*\n")
         bike_id = input("Enter Bike ID to delete: ").strip()
         
         # Search for the bike in the inventory
@@ -353,11 +353,24 @@ class PedalHub:
 
     def mark_bike_completed(self):
         self.clear_screen()
-        print("\n*|---------- Mark Bike as Completed ----------|*")
+        
+        for index, booking in enumerate(self.bookings, start=1):
+            print(f"\nRental #{index}")
+            print(f"  First Name     : {booking['customer_firstName']}")
+            print(f"  Last Name      : {booking['customer_lastName']}")
+            print(f"  Phone Number   : {booking['customer_phone']}")
+            print(f"  Bike ID        : {booking['bike_id']}")
+            print(f"  Rental Hours   : {booking['rental_hours']}")
+            print(f"  Total Cost     : Php {booking['total_cost']:.2f}")
+            print(f"  Status         : {booking.get('status', 'Active')}")  # Display status
+            print("-" * 40)
+        
+        print("\n\n*|---------- Mark Bike as Completed ----------|*")
 
         if not self.bookings:
             print("No active rentals to complete.")
             return  # Return after showing message, preventing further execution
+        
 
         bike_id = input("Enter the Bike ID to mark as completed: ").strip()
 

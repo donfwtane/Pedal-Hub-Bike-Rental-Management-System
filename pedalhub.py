@@ -6,6 +6,7 @@ from booking import Booking
 from datamanager import DataManager
 
 
+
 class PedalHub:
     ADMIN_USERNAME = "admin"
     ADMIN_PASSWORD = "youradmin123"
@@ -70,7 +71,7 @@ class PedalHub:
 
             while True:
                 self.display_main_menu()
-                choice = self.get_user_input("Enter your choice: ", int)
+                choice = int (input("Enter your choice (1-4): "))
 
                 if choice == 1:
                     self.view_bikes()
@@ -79,7 +80,7 @@ class PedalHub:
                 elif choice == 3:
                     self.admin_dashboard()
                 elif choice == 4:
-                    print("\nThank you for choosing Pedal Hub! See you next time!")
+                    print("\nThank you for choosing Pedal Hub! See you next time!\n\"Every time you ride your bike, you\'re making the planet a little greener.\" - Roxanne Ariola\n")
                     self.save_data()  # Save all data before exiting
                     break
                 else:
@@ -117,19 +118,19 @@ class PedalHub:
             print("***************************************************************************************************************************************************************\n\n")
     
             
-            print("\n*|---------- List of Bikes ----------|*\n")
+            print("\n*|--------------------------------------------- List of Bikes ---------------------------------------------|*\n")
             if not self.bike_inventory:
                 print("No bikes available at the moment.")
                 return
 
             # Display the bike inventory in a structured tabular format
-            print(f"{'Bike ID':<15} {'Type':<20} {'Size':10} {'Color':<15} {'Rental Price (per hour)':<30} {'Available':<20}")
-            print("=" * 110) 
+            print(f"{'Bike ID':<15} {'Type':<24} {'Size':13} {'Color':<15} {'Rental Price (per hour)':<30} {'Available':<20}")
+            print("=" * 112) 
 
              # Loop through the bikes in the inventory and display each bike's details
             for bike in self.bike_inventory:
                 availability = "Yes" if bike.available else "No"
-                print(f"{bike.bike_id:<15} {bike.bike_type:<20} {bike.size:<10} {bike.color:<15} Php {bike.rental_price:<27.2f} {availability:<20}")
+                print(f"{bike.bike_id:<15} {bike.bike_type:<24} {bike.size:<13} {bike.color:<20} Php {bike.rental_price:<24.2f} {availability:<20}")
         
         except Exception as e:
             print(f"Error displaying bikes: {e}")
@@ -184,24 +185,57 @@ class PedalHub:
             print("[1] Hours")
             print("[2] Minutes")
             
+            duration_hours = None
+            duration_minutes = None
+            total_cost = None
             while True:
-                duration_choice = self.get_user_input("Select an option (1 or 2): ", int, min_value=1, max_value=2)
+                try:
+                    duration_choice = int(input("Select an option (1 or 2): "))
+                    if duration_choice not in [1, 2]:
+                        print("Invalid choice. Please select 1 or 2 for the type of rental duration.")
+                        continue
+                    break
+                except ValueError:
+                    print("Invalid input. Please enter a number.")
+                    
+                
 
-                if duration_choice == 1:
-                    duration = self.get_user_input("Enter duration in hours: ", int)
-                    if duration > 1:
-                        duration_hours = duration
-                        break
-                    print("Rental duration must be greater than 1 hour.")
-                elif duration_choice == 2:
-                    duration = self.get_user_input("Enter duration in minutes: ", int)
-                    if duration > 1:
-                        duration_hours = duration / 60
-                        break
-                    print("Rental duration must be greater than 60 minutes.")
+            if duration_choice == 1:
+                while True:
+                    try:
+                        duration = int(input("Enter duration in hours: "))
+                        if duration > 1:
+                            duration_hours = duration
+                            break
+                        print("Rental duration must be greater than 1 hour.")
+                    except ValueError:
+                        print("Invalid input. Please enter a valid number.")
+                        
+            elif duration_choice == 2:
+                while True:
+                    try:
+                        duration = int(input("Enter duration in minutes: "))
+                        if duration > 1:
+                            duration_hours = duration / 60
+                            break
+                        else:
+                            print("Rental duration must be greater than 60 minutes.")
+                    except ValueError:
+                        print("Invalid input. Please enter a valid number.")
 
-            total_cost = bike.calculate_rental_cost(duration_hours)
+                if duration_hours is not None:
+                    total_cost = bike.calculate_rental_cost(duration_hours)
 
+                    if duration_choice == 2:
+                        print(f"Rental Duration: {duration_hours: .2f} minutes.")
+                    else:
+                        print(f"Rental duration: {duration_hours} hours.")
+                        
+                    print(f"Rental cost: Php {total_cost: .2f}")
+                else:
+                    print("Error renting bike: Duration is not valid.")
+    
+                
             # Create a booking record for the rental
             booking = {
                 "customer_firstName": customer_firstName,
@@ -227,8 +261,20 @@ class PedalHub:
         except Exception as e:
             print(f"Error renting bike: {e}")
             
-
+            
+    def authenticate_admin(self):
+            self.clear_screen()
+            print("\n*|---------- Admin Login ----------|*")
+            username = input("Enter Admin Username: ").strip()
+            password = input("Enter Admin Password: ").strip()
+            return username == self.ADMIN_USERNAME and password == self.ADMIN_PASSWORD
+        
+        
     def admin_dashboard(self):
+        """ 
+        Checks if the admin entered the correct credentials for admin login before granting access to the dashboard.
+        If authentication fails, deny access and redirect to the main menu.
+        """
         if not self.authenticate_admin():
             print("Access Denied. Returning to Main Menu...")
             return
@@ -245,7 +291,7 @@ class PedalHub:
             print("|\t [5] Back To Main Menu   \t\t|")
             print("=================================================")
 
-            choice = self.get_user_input("Enter your choice: ", int)
+            choice = int(input("Enter your choice (1-5): "))
 
             if choice == 1:
                 self.add_new_bike()
@@ -263,13 +309,12 @@ class PedalHub:
             else:
                 print("Invalid choice. Try again.")
 
-    def authenticate_admin(self):
-        self.clear_screen()
-        print("\n*|---------- Admin Login ----------|*")
-        username = input("Enter Admin Username: ").strip()
-        password = input("Enter Admin Password: ").strip()
-        return username == self.ADMIN_USERNAME and password == self.ADMIN_PASSWORD
-
+    
+    """ 
+    No error handling is implemented here because this method is intended for admin use. 
+    Admins are expected to provide correct and valid inputs.
+    If a mistake is made (incorrect details for the bike), they can later delete the entry and re-add it with correct details.
+    """
     def add_new_bike(self):
         self.clear_screen()
         self.view_bikes()
@@ -278,14 +323,17 @@ class PedalHub:
         bike_type = input("Enter the type of Bike: ").strip()
         size = input("Enter the size: ").strip()
         color = input("Enter Color: ").strip()
-        rental_price = self.get_user_input("Enter Rental Price per Hour: ", float)
+        rental_price = float(input("Enter rental Price per Hour: "))
 
         self.bike_inventory.append(
             BikeDetails(bike_id, bike_type, size, color, rental_price)
         )
-        self.save_data()  # Save the bike data immediately after adding
-        print("Bike added successfully!")
         
+        self.save_data()  # Save the bike data immediately after adding
+        print("Bike has been added to the inventory successfully!!")
+    
+    
+    # Allows the admin to delete a bike from the inventory by specifying its Bike ID.
     def delete_bike(self):
         self.clear_screen()
         self.view_bikes()
@@ -295,7 +343,7 @@ class PedalHub:
         # Search for the bike in the inventory
         for bike in self.bike_inventory:
             if bike.bike_id.lower() == bike_id.lower():
-                self.bike_inventory.remove(bike)
+                self.bike_inventory.remove(bike) # Removes the bike from the inventory and change
                 self.save_data()  # Save the updated inventory to the file
                 print(f"Bike {bike_id} has been deleted successfully.")
                 return
@@ -372,36 +420,18 @@ class PedalHub:
                         # Save updated bookings and bike inventory directly to files
                         self.save_to_file(self.BOOKINGS_FILE, self.bookings)
                         self.save_to_file(self.BIKE_FILE, [bike.to_dict() for bike in self.bike_inventory])
-                        print(f"Rental #{booking_number} has been successfully deleted from the file.")
+                        print(f"Rental #{booking_number} has been successfully deleted from the file.\n")
                     else:
                         print("Invalid booking number. Please try again.")
                 except ValueError:
                     print("Invalid input. Please enter a valid booking number.")
             elif delete_choice == "no":
                 print("Returning to Admin Dashboard...")
+                self.clear_screen()
                 break
             else:
                 print("Invalid choice. Please enter 'yes' or 'no'.")
             
-            
-    @staticmethod
-    def get_user_input(prompt, input_type, min_value=None, max_value=None):
-        while True:
-            try:
-                value = input_type(input(prompt).strip())
-                
-                # Checks if a minimum value is set, and ensure the entered value is not less than the minimum
-                if min_value and value < min_value:
-                    print(f"Value must be at least {min_value}. Try again.")
-                    continue   # If the input is too low, ask for input again
-                
-                # Check if a maximum value is set, and ensure the entered value is not greater than the maximum
-                if max_value and value > max_value:
-                    print(f"Value must be at most {max_value}. Try again.")
-                    continue  # If the input is too high, ask for input again
-                return value
-            except ValueError:
-                print("Invalid input. Please try again.")
 
 if __name__ == "__main__":         
     pedal_hub = PedalHub()  # Create instance of PedalHub

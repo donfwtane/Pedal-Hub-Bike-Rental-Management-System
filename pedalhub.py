@@ -1,11 +1,6 @@
 import os
 import json
-from customer import Customer
 from bikedetails import BikeDetails
-from booking import Booking
-from datamanager import DataManager
-
-
 
 class PedalHub:
     ADMIN_USERNAME = "admin"

@@ -19,7 +19,7 @@ class Customer:
     def from_dict(data):
         # Create and return a new Customer instance using the provided dictionary data
         return Customer(
-            first_name=data["first_name"],   # Extract the first nae from the dictionary
+            first_name=data["first_name"],   # Extract the first name from the dictionary
             last_name=data["last_name"],     # Extract the last name from the dictionary
             phone=data["phone"]              # Extract the phone number from the dictionary
         )

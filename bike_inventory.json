@@ -1,0 +1,34 @@
+[
+    {
+        "bike_id": "B001",
+        "bike_type": "Mountain Bike",
+        "size": "S",
+        "color": "Blue",
+        "rental_price": 10.0,
+        "available": false
+    },
+    {
+        "bike_id": "B002",
+        "bike_type": "Mountain Bike",
+        "size": "L",
+        "color": "Red",
+        "rental_price": 10.0,
+        "available": true
+    },
+    {
+        "bike_id": "B003",
+        "bike_type": "Road Bike",
+        "size": "L",
+        "color": "Black",
+        "rental_price": 12.0,
+        "available": true
+    },
+    {
+        "bike_id": "B004",
+        "bike_type": "Road Bike",
+        "size": "XS",
+        "color": "Black",
+        "rental_price": 9.5,
+        "available": true
+    }
+]

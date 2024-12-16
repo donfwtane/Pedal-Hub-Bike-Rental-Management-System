@@ -1,8 +1,5 @@
 import os
 import json
-from booking import Booking
-from customer import Customer
-from datamanager import DataManager
 from bikedetails import BikeDetails
 
 class PedalHub:
